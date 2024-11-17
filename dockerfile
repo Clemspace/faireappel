@@ -1,12 +1,11 @@
-FROM nvidia/cuda:11.8.0-runtime-ubuntu22.04
+FROM python:3.10-slim
 
 WORKDIR /app
 
-# Install Python and required system dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    python3.10 \
-    python3-pip \
     git \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python packages

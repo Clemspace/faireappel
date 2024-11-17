@@ -1,8 +1,9 @@
 streamlit==1.29.0
 pypdf==3.17.1
-llama-index==0.9.7
+llama-index==0.8.56
 transformers==4.35.2
 torch==2.1.1
-bitsandbytes==0.41.1
-accelerate==0.24.1
 sentence-transformers==2.2.2
+accelerate==0.24.1
+bitsandbytes==0.41.1
+protobuf==4.25.1

@@ -6,6 +6,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     git \
     build-essential \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python packages
@@ -15,16 +16,14 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
-# Expose Streamlit port
-EXPOSE 8501
+# Make sure the entrypoint script is executable
+RUN chmod +x Procfile
 
-# Download and cache models at build time
-RUN python3 -c "from transformers import AutoTokenizer, AutoModelForCausalLM; \
-    AutoTokenizer.from_pretrained('TheBloke/falcon-7b-instruct-GPTQ'); \
-    AutoModelForCausalLM.from_pretrained('TheBloke/falcon-7b-instruct-GPTQ', device_map='auto', trust_remote_code=True)"
+# Default port (will be overridden by Koyeb)
+ENV PORT=8501
 
 # Health check
-HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health
+HEALTHCHECK CMD curl --fail http://localhost:${PORT}/_stcore/health
 
-# Run the application
-ENTRYPOINT ["streamlit", "run", "main2.py", "--server.port=8501", "--server.address=0.0.0.0"]
+# Let Koyeb handle the command through Procfile
+CMD streamlit run main_test.py --server.port=$PORT --server.address=0.0.0.0

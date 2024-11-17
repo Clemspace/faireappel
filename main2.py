@@ -233,14 +233,20 @@ def main():
                         
                         # Option to download
                         if st.button("Télécharger le rapport"):
-                            report = f"""# Rapport de stratégie d'appel
+                            # Create the report content with proper line breaks
+                            report_lines = ["# Rapport de stratégie d'appel\n"]
                             
-## Points sélectionnés
-{''.join(f'- {point.text}\n' for point in selected_points)}
-
-## Stratégie détaillée
-{''.join(f'### {section}\n{content}\n\n' for section, content in strategy.items())}
-"""
+                            report_lines.append("\n## Points sélectionnés")
+                            for point in selected_points:
+                                report_lines.append(f"- {point.text}")
+                            
+                            report_lines.append("\n## Stratégie détaillée")
+                            for section, content in strategy.items():
+                                report_lines.append(f"\n### {section}")
+                                report_lines.extend(content)
+                            
+                            report = "\n".join(report_lines)
+                            
                             st.download_button(
                                 "Télécharger en format texte",
                                 report,
